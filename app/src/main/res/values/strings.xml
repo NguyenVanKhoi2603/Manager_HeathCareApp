@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">ManagerHeathCareApp</string>
+    <string name="news">News</string>
+    <string name="feedback">Feedback</string>
+    <string name="message">Message</string>
+    <string name="setting">Settings</string>
+    <string name="back">Back</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="title_toolbar_feedback">FEEDBACK</string>
+    <string name="title_toolbar_news">NEWS</string>
+    <string name="title_toolbar_settings">SETTINGS</string>
+    <string name="title_toolbar_message">MESSAGE</string>
+    <string name="title_toolbar_create_news">CREATE NEWS</string>
+    <string name="hint_news_headlines">News headlines</string>
+    <string name="hint_description">Description</string>
+    <string name="hint_url">URL</string>
+    <string name="btn_send">SEND</string>
+    <string name="btn_submit">SUBMIT</string>
+    <string name="option">Option</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="view">View</string>
+    <string name="login">Login</string>
+    <string name="sex">Sex</string>
+    <string name="birth_date">BIRTHDATE</string>
+    <string name="women">Women</string>
+    <string name="man">Man</string>
+    <string name="other">Other</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="full_name">Full name</string>
+    <string name="position">Position</string>
+    <string name="introduce">Introduce</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="title_toolbar_manager_admin">ADMIN</string>
+    <string name="title_toolbar_manager_counselors">COUNSELORS</string>
+    <string name="admin">Admin</string>
+    <string name="logout">Log out</string>
+    <string name="ask_logout">Do you want logout?</string>
+    <string name="counselors">Counselors</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="des_forgot_password">Enter your email address to receive instructions to reset your password.</string>
+
+</resources>

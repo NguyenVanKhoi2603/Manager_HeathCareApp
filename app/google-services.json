@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "426334053680",
+    "firebase_url": "https://healthcareapp-3fe30.firebaseio.com",
+    "project_id": "healthcareapp-3fe30",
+    "storage_bucket": "healthcareapp-3fe30.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426334053680:android:48a18419c0e9b5241f54f5",
+        "android_client_info": {
+          "package_name": "com.example.managerheathcareapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426334053680-dvhp58hiepf3eou0thanfrs6rphh1b5i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCjB9sAds66hJDYsLkSk9u3OwxDWqwDKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426334053680-dvhp58hiepf3eou0thanfrs6rphh1b5i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426334053680:android:223409463b275e5c1f54f5",
+        "android_client_info": {
+          "package_name": "com.tdc.edu.vn.heathcareapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426334053680-silv7bq98r75ai8p3ul11c22mma0memi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tdc.edu.vn.heathcareapp",
+            "certificate_hash": "8146b82ef20d26bc960a811bf40f4a15b2d873a5"
+          }
+        },
+        {
+          "client_id": "426334053680-dvhp58hiepf3eou0thanfrs6rphh1b5i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCjB9sAds66hJDYsLkSk9u3OwxDWqwDKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426334053680-dvhp58hiepf3eou0thanfrs6rphh1b5i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426334053680:android:7bc6015e67e11f371f54f5",
+        "android_client_info": {
+          "package_name": "tdc.edu.vn.testlogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426334053680-dvhp58hiepf3eou0thanfrs6rphh1b5i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCjB9sAds66hJDYsLkSk9u3OwxDWqwDKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426334053680-dvhp58hiepf3eou0thanfrs6rphh1b5i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.managerheathcareapp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ManagerHeathCareApp">
+        <activity android:name=".FormWorkCounselorsMainActivity">
+
+        </activity>
+        <activity android:name=".Manager_counselorsActivity" />
+        <activity android:name=".FormWorkAdminActivity">
+
+        </activity>
+        <activity android:name=".ManagerAdminActivity" />
+        <activity android:name=".ForgotPasswordActivity" />
+        <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".NewsActivity">
+
+        </activity>
+        <activity android:name=".CreateNewsActivity" >
+
+        </activity>
+        <activity android:name=".FeedbackActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".MessageActivity" />
+        <activity android:name=".MainActivity" />
+    </application>
+
+</manifest>

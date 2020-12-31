@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/style_border_toolbar">
+
+    <RelativeLayout
+        style="@style/rl_toolbar_basic">
+
+        <ImageButton
+            android:id="@+id/icon_backSpace_manager_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:src="@drawable/ic_backspace"></ImageButton>
+
+        <TextView
+            android:id="@+id/titleNewFeed"
+            style="@style/title_toolbar"
+            android:layout_toStartOf="@id/icon_add_news_admin"
+            android:layout_toLeftOf="@id/icon_add_news_admin"
+            android:layout_toEndOf="@id/icon_backSpace_manager_admin"
+            android:layout_toRightOf="@id/icon_backSpace_manager_admin"
+            android:text="@string/title_toolbar_manager_admin">
+
+        </TextView>
+
+
+
+        <ImageButton
+            android:id="@+id/icon_add_news_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@color/white"
+            android:src="@drawable/ic_add"></ImageButton>
+    </RelativeLayout>
+
+</RelativeLayout>
