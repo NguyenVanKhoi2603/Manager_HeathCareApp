@@ -38,6 +38,16 @@
 
             </TextView>
 
+                <TextView
+                    android:id="@+id/tv_category_item_post"
+                    android:layout_width="match_parent"
+                    android:text="#nutrtion"
+                    android:layout_height="wrap_content">
+
+                </TextView>
+
+
+
             <TextView
                 android:id="@+id/tv_content_item_news"
                 android:textStyle="italic"

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/style_border_toolbar">
+
+    <RelativeLayout
+        style="@style/rl_toolbar_basic"
+        android:layout_centerVertical="true">
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/icon_backspace_chat_list_user_to_user"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:background="@color/white"-->
+<!--            android:src="@drawable/ic_back_ios"></ImageButton>-->
+
+        <TextView
+            android:id="@+id/title_toolbar_user_to_user"
+            style="@style/title_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="CHAT">
+
+        </TextView>
+
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/icon_new_message_user_to_user"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:background="@color/white"-->
+<!--            android:src="@drawable/ic_add">-->
+
+<!--        </ImageButton>-->
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.managerheathcareapp.Model.Counselor;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -32,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference;
+    DatabaseReference counselorRef = firebaseDatabase.getReference("Counselors");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,14 +54,13 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
             }
         });
-
+        loginFunc("counselor2@gmail.com", "123456789");
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (txt_username.getText().length() > 1  && txt_password.getText().length() > 1){
+                if (txt_username.getText().length() > 1 && txt_password.getText().length() > 1) {
                     String username = txt_username.getText().toString().trim();
                     String password = txt_password.getText().toString().trim();
-
                     loginFunc(username, password);
                 } else {
                     Toast.makeText(LoginActivity.this, "login failed", Toast.LENGTH_SHORT).show();
@@ -73,18 +75,30 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
                             FirebaseUser user = mAuth.getCurrentUser();
-                            //Query query =
                             Query query = databaseReference.orderByChild("id_admin").equalTo(user.getUid());
                             query.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.hasChild(user.getUid())){
+                                    if (snapshot.hasChild(user.getUid())) {
                                         Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(LoginActivity.this, NewsActivity.class));
+                                        startActivity(new Intent(LoginActivity.this, NewsAndNutritionActivity.class));
                                     }
-                                    else {
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                            counselorRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.hasChild(user.getUid())) {
+                                        Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(LoginActivity.this, MessageActivity.class));
+                                    } else {
                                         Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -95,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            Toast.makeText(LoginActivity.this, "Login failed.",
+                            Toast.makeText(LoginActivity.this, "Login failed....",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }

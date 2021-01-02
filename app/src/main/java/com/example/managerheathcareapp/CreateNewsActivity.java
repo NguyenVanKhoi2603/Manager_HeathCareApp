@@ -1,6 +1,7 @@
 package com.example.managerheathcareapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
@@ -14,15 +15,24 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.managerheathcareapp.Model.New;
+import com.example.managerheathcareapp.Model.NewAndNutrition;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -37,6 +47,7 @@ import java.util.TimeZone;
 public class CreateNewsActivity extends AppCompatActivity {
     ImageButton imageButtonBackSpace, imageButtonImage;
     Button btn_submit;
+    RadioButton rb_news, rb_nutrition;
     ImageView imageViewCreate;
     TextInputEditText txt_title, txt_des, txt_url;
 
@@ -45,9 +56,8 @@ public class CreateNewsActivity extends AppCompatActivity {
     public static final String DATE_FORMATCreateAt = "yyyy-MM-dd-HH:mm:ss";
     // Firebase
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    private DocumentReference cateRef = db.document("News/NewsTest");
-    private CollectionReference newsRef = db.collection("News");
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference postAndNutritionRef = database.getReference("PostsNewAndNutrition");
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private Uri imgUri;
     private StorageTask uploadTask;
@@ -61,7 +71,7 @@ public class CreateNewsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_news);
+        setContentView(R.layout.activity_create_post);
         setControl();
         setEvent();
 
@@ -74,23 +84,42 @@ public class CreateNewsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 id_image = System.currentTimeMillis() + "." + getExtension(imgUri);
-
+                String ID = System.currentTimeMillis() + "";
                 String title = txt_title.getText().toString();
                 String des = txt_des.getText().toString();
                 String url = txt_url.getText().toString();
-                New category = new New(getCurrentDate(), title, des, url, id_image);
-                newsRef.add(category).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-
-                        if (uploadTask != null && uploadTask.isInProgress()) {
-                            Toast.makeText(CreateNewsActivity.this, "In progress upload!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            uploadFile(id_image);
-                            onBackPressed();
-                        }
-                    }
-                });
+                String category = "news";
+                if (rb_news.isChecked() == true) {
+                    category = "news";
+                } else {
+                    category = "nutrition";
+                }
+                NewAndNutrition newAndNutrition = new NewAndNutrition(ID, title, des, url, id_image, category, ID);
+//                postAndNutritionRef.child(ID).setValue(newAndNutrition);
+//                if (uploadTask != null && uploadTask.isInProgress()) {
+//                    Toast.makeText(CreateNewsActivity.this, "In progress upload!", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    uploadFile(id_image);
+//                    onBackPressed();
+//                }
+                db.collection("PostsNewAndNutrition").document(ID).set(newAndNutrition)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                uploadFile(id_image);
+                                try {
+                                    Thread.sleep(3000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                if (uploadTask != null && uploadTask.isInProgress()) {
+                                    Toast.makeText(CreateNewsActivity.this, "In progress upload!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(CreateNewsActivity.this, "In progress upload!", Toast.LENGTH_SHORT).show();
+                                    onBackPressed();
+                                }
+                            }
+                        });
             }
         });
         imageButtonBackSpace.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +206,8 @@ public class CreateNewsActivity extends AppCompatActivity {
         txt_url = findViewById(R.id.txt_url_news);
         imageButtonImage = findViewById(R.id.img_choose_create_news);
         imageViewCreate = findViewById(R.id.image_view_news_create);
+        rb_news = findViewById(R.id.rd_news_create_post);
+        rb_nutrition = findViewById(R.id.rd_nutrition_create_post);
     }
 
 

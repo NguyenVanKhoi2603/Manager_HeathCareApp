@@ -5,17 +5,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.managerheathcareapp.Model.Admin;
+import com.example.managerheathcareapp.Model.Counselor;
+import com.example.managerheathcareapp.Model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,12 +35,18 @@ public class SettingsActivity extends AppCompatActivity {
     CardView cv_Admin, cv_Counselors, cv_logOut;
     ImageButton imageButtonLogOut;
     TextView tv_fullNameAdmin, tv_position;
+    LinearLayout lnl_option_settings;
 
     private ArrayList<Admin> mDataAdmin = new ArrayList<>();
+    private ArrayList<Counselor> dataCounselor = new ArrayList<>();
+    private ArrayList<User> dataUser = new ArrayList<>();
     // Firebase
     private FirebaseAuth mAuth;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
     DatabaseReference dataRefAdmin;
+    DatabaseReference counselorRef = firebaseDatabase.getReference("Counselors");
+    DatabaseReference userRef = firebaseDatabase.getReference("Users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +74,18 @@ public class SettingsActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 mDataAdmin.clear();
+                                String checkCounselor = "0";
                                 for (DataSnapshot ds : snapshot.getChildren()) {
                                     Admin admin = ds.getValue(Admin.class);
                                     if (admin.getId_admin().equals(currentUser.getUid())) {
                                         mDataAdmin.add(admin);
+                                        checkCounselor = "0";
                                     }
+
                                 }
                                 try {
                                     if (mDataAdmin != null) {
+                                        lnl_option_settings.setVisibility(View.VISIBLE);
                                         Toast.makeText(SettingsActivity.this, mDataAdmin.get(0).toString(), Toast.LENGTH_SHORT).show();
                                         tv_fullNameAdmin.setText(mDataAdmin.get(0).getFullName());
                                         if (mDataAdmin.get(0).getRole().equals("1")) {
@@ -83,20 +95,125 @@ public class SettingsActivity extends AppCompatActivity {
                                             tv_position.setText("Admin");
                                             cv_Admin.setVisibility(View.GONE);
                                         }
+                                    } else {
+                                        counselorRef.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                dataCounselor.clear();
+                                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                                    Counselor counselor = ds.getValue(Counselor.class);
+                                                    if (counselor.getId_counselor().equals(currentUser.getUid())) {
+                                                        dataCounselor.add(counselor);
+                                                    }
+                                                }
+                                                if (dataCounselor != null) {
+                                                    try {
+                                                        tv_position.setText(dataCounselor.get(0).getPosition_counselor());
+                                                    }catch (Exception exception){
+
+                                                    }
+
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
+                                        userRef.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                dataUser.clear();
+                                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                                    User user = ds.getValue(User.class);
+                                                    if (user.getUser_id().equals(currentUser.getUid())) {
+                                                        dataUser.add(user);
+                                                    }
+                                                }
+
+                                                if (dataUser != null) {
+                                                    try {
+                                                        tv_fullNameAdmin.setText(dataUser.get(0).getFirst_name() + " " + dataUser.get(0).getLast_name());
+                                                    }catch (Exception exception){
+
+                                                    }
+
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
                                     }
+
                                 } catch (Exception ex) {
+                                    counselorRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            dataCounselor.clear();
+                                            for (DataSnapshot ds : snapshot.getChildren()) {
+                                                Counselor counselor = ds.getValue(Counselor.class);
+                                                if (counselor.getId_counselor().equals(currentUser.getUid())) {
+                                                    dataCounselor.add(counselor);
+                                                }
+                                            }
+                                            if (dataCounselor != null) {
+                                                try {
+                                                    tv_position.setText(dataCounselor.get(0).getPosition_counselor());
+                                                }catch (Exception exception){
+
+                                                }
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                    userRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            dataUser.clear();
+                                            for (DataSnapshot ds : snapshot.getChildren()) {
+                                                User user = ds.getValue(User.class);
+                                                if (user.getUser_id().equals(currentUser.getUid())) {
+                                                    dataUser.add(user);
+                                                }
+                                            }
+
+                                            if (dataUser != null) {
+                                                try {
+                                                    tv_fullNameAdmin.setText(dataUser.get(0).getFirst_name() + " " + dataUser.get(0).getLast_name());
+                                                }catch (Exception exception){
+
+                                                }
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
                                 }
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-
+                                Toast.makeText(getApplicationContext(), "ssafsfasf", Toast.LENGTH_SHORT).show();
                             }
                         });
                     } else {
 
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
 
@@ -121,7 +238,7 @@ public class SettingsActivity extends AppCompatActivity {
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.News:
-                        Intent intent2 = new Intent(getApplicationContext(), NewsActivity.class);
+                        Intent intent2 = new Intent(getApplicationContext(), NewsAndNutritionActivity.class);
                         startActivity(intent2);
                         intent2.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         overridePendingTransition(0, 0);
@@ -191,6 +308,7 @@ public class SettingsActivity extends AppCompatActivity {
         imageButtonLogOut = findViewById(R.id.icon_exit_app_settings);
         tv_fullNameAdmin = findViewById(R.id.tv_fullName_admin_settings);
         tv_position = findViewById(R.id.tv_position_admin_settings);
+        lnl_option_settings = findViewById(R.id.lnl_option_settings);
 
     }
 }

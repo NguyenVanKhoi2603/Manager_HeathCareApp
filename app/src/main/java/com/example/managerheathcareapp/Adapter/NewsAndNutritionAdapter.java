@@ -1,11 +1,8 @@
 package com.example.managerheathcareapp.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,35 +13,29 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.Guideline;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.bumptech.glide.Glide;
 import com.example.managerheathcareapp.Model.New;
+import com.example.managerheathcareapp.Model.NewAndNutrition;
 import com.example.managerheathcareapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
+public class NewsAndNutritionAdapter extends RecyclerView.Adapter<NewsAndNutritionAdapter.NewsViewHolder> {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
 
-    ArrayList<New> mNews;
+    ArrayList<NewAndNutrition> mNews;
     Context context;
     String _id_news = "";
     private String strImg = "";
 
-    public NewsAdapter(ArrayList<New> mNews, Context context) {
+    public NewsAndNutritionAdapter(ArrayList<NewAndNutrition> mNews, Context context) {
         this.mNews = mNews;
         this.context = context;
     }
@@ -53,15 +44,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.item_news, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
         return new NewsViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
 
-        New news = mNews.get(position);
-        strImg = news.getImg_new();
+        NewAndNutrition news = mNews.get(position);
+        strImg = news.getImage_id();
         if (news == null) {
             return;
         }
@@ -85,9 +76,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         } catch (Exception ex) {
 
         }
-
-        holder.tv_title_news.setText(news.getTitle_new());
-        holder.tv_content_news.setText(news.getContent_new());
+        holder.tv_category_post.setText("#"+news.getCategory());
+        holder.tv_title_news.setText(news.getTitle());
+        holder.tv_content_news.setText(news.getDescription());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,7 +91,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                _id_news = news.getId_new();
+                _id_news = news.getId_post();
                 return false;
             }
         });
@@ -117,7 +108,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         ImageView imageViewNews;
-        TextView tv_title_news, tv_content_news, tv_author_news;
+        TextView tv_title_news, tv_content_news, tv_category_post;
         CardView cardView;
 
         public NewsViewHolder(@NonNull View itemView) {
@@ -126,8 +117,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             tv_content_news = itemView.findViewById(R.id.tv_content_item_news);
             tv_title_news = itemView.findViewById(R.id.tv_title_item_news);
             cardView = itemView.findViewById(R.id.item_news_card);
+            tv_category_post = itemView.findViewById(R.id.tv_category_item_post);
             cardView.setOnCreateContextMenuListener(this);
-
         }
 
         @Override

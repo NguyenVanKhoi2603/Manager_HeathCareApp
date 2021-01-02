@@ -19,7 +19,7 @@
             android:layout_toLeftOf="@id/icon_empty"
             android:layout_toEndOf="@id/icon_backSpace_create_news"
             android:layout_toRightOf="@id/icon_backSpace_create_news"
-            android:text="@string/title_toolbar_create_news">
+            android:text="CREATE POST">
 
         </TextView>
 

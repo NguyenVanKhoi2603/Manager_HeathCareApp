@@ -16,6 +16,7 @@
 
         </activity>
         <activity android:name=".Manager_counselorsActivity" />
+        <activity android:name=".ConversationDetailActivity" />
         <activity android:name=".FormWorkAdminActivity">
 
         </activity>
@@ -28,7 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewsActivity">
+        <activity android:name=".NewsAndNutritionActivity">
 
         </activity>
         <activity android:name=".CreateNewsActivity" >

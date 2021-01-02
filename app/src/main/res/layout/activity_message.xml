@@ -8,10 +8,11 @@
     <include android:id="@+id/include_toolbar_message" layout="@layout/toolbar_message"></include>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_below="@id/include_toolbar_message"
-        android:id="@+id/rcl_message_list"
+        android:id="@+id/rcy_chatList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include_toolbar_message"
+        android:layout_marginBottom="70dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 

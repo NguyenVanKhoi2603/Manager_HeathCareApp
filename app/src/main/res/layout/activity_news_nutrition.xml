@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewsAndNutritionActivity">
+
+    <include
+        android:id="@+id/include_toolbar_news"
+        layout="@layout/toolbar_news"></include>
+
+    <LinearLayout
+        android:id="@+id/lnl_dashboard_post_nutrition_new"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/include_toolbar_news"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <EditText
+            android:id="@+id/txt_search_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/custom_btn_user_profile1"
+            android:hint="Enter title"
+            android:padding="7dp">
+
+        </EditText>
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/sp_category_post"
+            style="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:padding="7dp">
+
+        </androidx.appcompat.widget.AppCompatSpinner>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcl_news"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lnl_dashboard_post_nutrition_new"
+        android:layout_marginBottom="65dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <include
+        android:id="@+id/include_bottom_navigation"
+        layout="@layout/navigation_bottom_bar"></include>
+</RelativeLayout>

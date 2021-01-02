@@ -6,49 +6,82 @@
     android:layout_height="match_parent"
     tools:context=".CreateNewsActivity">
 
-    <include android:id="@+id/include_toolbar_create_news" layout="@layout/toolbar_create_news"></include>
+    <include
+        android:id="@+id/include_toolbar_create_news"
+        layout="@layout/toolbar_create_post"></include>
+
     <ScrollView
-        android:layout_below="@id/include_toolbar_create_news"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/include_toolbar_create_news">
+
         <LinearLayout
-            android:padding="10dp"
-            android:layout_below="@id/include_toolbar_create_news"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/include_toolbar_create_news"
             android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_height="300dp">
+                android:layout_height="300dp"
+                android:orientation="horizontal">
+
                 <ImageButton
                     android:id="@+id/img_choose_create_news"
                     android:layout_width="wrap_content"
-                    android:src="@drawable/ic_image"
-                    android:layout_height="wrap_content">
-                </ImageButton>
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_image"></ImageButton>
 
                 <ImageView
                     android:id="@+id/image_view_news_create"
-                    android:padding="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></ImageView>
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"></ImageView>
 
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Category"
+                android:textStyle="bold"></TextView>
 
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_btn_radio"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rd_news_create_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/news"></RadioButton>
+
+                <RadioButton
+                    android:id="@+id/rd_nutrition_create_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="19dp"
+                    android:layout_marginRight="19dp"
+                    android:text="Nutrition"></RadioButton>
+
+            </RadioGroup>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_title_news"
                     android:layout_width="match_parent"
-                    android:hint="@string/hint_news_headlines"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:hint="Headlines">
 
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
@@ -57,13 +90,14 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_des_news"
                     android:layout_width="match_parent"
-                    android:lines="5"
+                    android:layout_height="wrap_content"
                     android:gravity="top"
                     android:hint="@string/hint_description"
-                    android:layout_height="wrap_content">
+                    android:lines="5">
 
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
@@ -72,23 +106,22 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_url_news"
                     android:layout_width="match_parent"
-                    android:hint="@string/hint_url"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_url">
 
                 </com.google.android.material.textfield.TextInputEditText>
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/btn_submit_create_news"
-                android:hint="@string/btn_submit"
-                style="@style/btn_basic">
-            </Button>
+                style="@style/btn_basic"
+                android:hint="@string/btn_submit"></Button>
         </LinearLayout>
     </ScrollView>
-
 
 
 </RelativeLayout>

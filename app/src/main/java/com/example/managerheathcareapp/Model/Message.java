@@ -64,5 +64,4 @@ public class Message {
     public void setSeen(Boolean seen) {
         isSeen = seen;
     }
-
 }
