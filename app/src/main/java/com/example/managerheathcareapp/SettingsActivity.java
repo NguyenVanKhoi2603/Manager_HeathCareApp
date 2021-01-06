@@ -109,7 +109,7 @@ public class SettingsActivity extends AppCompatActivity {
                                                 if (dataCounselor != null) {
                                                     try {
                                                         tv_position.setText(dataCounselor.get(0).getPosition_counselor());
-                                                    }catch (Exception exception){
+                                                    } catch (Exception exception) {
 
                                                     }
 
@@ -135,7 +135,7 @@ public class SettingsActivity extends AppCompatActivity {
                                                 if (dataUser != null) {
                                                     try {
                                                         tv_fullNameAdmin.setText(dataUser.get(0).getFirst_name() + " " + dataUser.get(0).getLast_name());
-                                                    }catch (Exception exception){
+                                                    } catch (Exception exception) {
 
                                                     }
 
@@ -163,7 +163,7 @@ public class SettingsActivity extends AppCompatActivity {
                                             if (dataCounselor != null) {
                                                 try {
                                                     tv_position.setText(dataCounselor.get(0).getPosition_counselor());
-                                                }catch (Exception exception){
+                                                } catch (Exception exception) {
 
                                                 }
 
@@ -189,7 +189,7 @@ public class SettingsActivity extends AppCompatActivity {
                                             if (dataUser != null) {
                                                 try {
                                                     tv_fullNameAdmin.setText(dataUser.get(0).getFirst_name() + " " + dataUser.get(0).getLast_name());
-                                                }catch (Exception exception){
+                                                } catch (Exception exception) {
 
                                                 }
 
@@ -224,8 +224,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setEvent() {
-
-
         bottomNavigationView.setSelectedItemId(R.id.Settings);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

@@ -51,12 +51,7 @@ public class NewsAndNutritionActivity extends AppCompatActivity {
     // Firebase
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth;
-    private static final String ID_NEWS = "id_new";
-    private static final String TITLE_NEWS = "title_news";
-    private static final String DES_NEWS = "description_news";
-    private static final String URL_NEWS = "url_news";
 
-    private DocumentReference cateRef = db.document("News/NewsTest");
     private CollectionReference categoryRef = db.collection("News");
     private CollectionReference postsNewAndNutritionRef = db.collection("PostsNewAndNutrition");
     private ListenerRegistration listenerCate;
@@ -114,6 +109,7 @@ public class NewsAndNutritionActivity extends AppCompatActivity {
     }
 
     private void setEvent() {
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         ArrayList<String> Category = new ArrayList<>();

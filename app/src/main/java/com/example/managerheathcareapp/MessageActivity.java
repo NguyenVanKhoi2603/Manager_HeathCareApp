@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.managerheathcareapp.Adapter.ChatListAdapter;
 import com.example.managerheathcareapp.Model.ChatList;
@@ -37,6 +40,7 @@ public class MessageActivity extends AppCompatActivity {
     DatabaseReference chatListRef = database.getReference("ChatList");
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +48,7 @@ public class MessageActivity extends AppCompatActivity {
         setControl();
         setEvent();
     }
+
     private void showListChat(String user_id) {
         DatabaseReference listU = chatListRef.child(user_id);
         listU.addValueEventListener(new ValueEventListener() {
@@ -71,14 +76,17 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setEvent() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         String user_id = currentUser.getUid();
         showListChat(user_id);
         bottomNavigationView.setSelectedItemId(R.id.Message);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                item.setVisible(false);
                 switch (item.getItemId()) {
                     case R.id.Message:
                         return true;
@@ -105,6 +113,16 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
     }
+
+//    @Override
+//    public void onPrepareOptionsMenu(Menu menu) {
+//        super.onPrepareOptionsMenu(menu);
+//        if (menu.findItem(R.id.action_messages) != null)
+//            menu.findItem(R.id.action_messages).setVisible(false);
+//    }
+
+
+
 
     private void setControl() {
         bottomNavigationView = findViewById(R.id.bottom_navigation);

@@ -5,7 +5,69 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FeedbackActivity">
-    <include layout="@layout/toolbar_feedback"></include>
-    <include android:id="@+id/include_bottom_navigation" layout="@layout/navigation_bottom_bar"></include>
+
+    <include
+        android:id="@+id/include_toolbar_feedback"
+        layout="@layout/toolbar_feedback"></include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/include_toolbar_feedback"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_background_activity"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Feedback:"
+                android:textColor="@color/black"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:id="@+id/tv_total_feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="0">
+
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:text="Ratting:"
+                android:textColor="@color/black"
+                android:textStyle="bold"></TextView>
+
+            <RatingBar
+                android:id="@+id/_ratting_bar_average_rating"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:stepSize="0.5">
+
+            </RatingBar>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcy_list_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="70dp"></androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/include_bottom_navigation"
+        layout="@layout/navigation_bottom_bar"></include>
 
 </RelativeLayout>

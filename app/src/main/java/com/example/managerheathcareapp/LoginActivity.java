@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
             }
         });
-        loginFunc("counselor2@gmail.com", "123456789");
+        loginFunc("khoine123@gmail.com", "123456789");
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

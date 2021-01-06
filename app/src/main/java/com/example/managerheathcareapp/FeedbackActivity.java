@@ -2,15 +2,41 @@ package com.example.managerheathcareapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
+import com.example.managerheathcareapp.Adapter.FeedbackAdapter;
+import com.example.managerheathcareapp.Model.Feedback;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class FeedbackActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
+    RecyclerView rcy_list_feedback;
+    RatingBar ratingBarAverageRatting;
+    TextView tv_total_feedback;
+    ArrayList<Feedback> dataFeedback = new ArrayList<>();
+    FeedbackAdapter feedbackAdapter;
+    // Firebase
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference feedbackRef = database.getReference("Feedback");
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,7 +44,17 @@ public class FeedbackActivity extends AppCompatActivity {
         setControl();
         setEvent();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+    }
+
     private void setEvent() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String ID_USER = currentUser.getUid().toString();
+        showDataFeedback(ID_USER);
         bottomNavigationView.setSelectedItemId(R.id.Feedback);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -50,7 +86,42 @@ public class FeedbackActivity extends AppCompatActivity {
         });
     }
 
+    private void showDataFeedback(String id_user) {
+        feedbackRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                dataFeedback.clear();
+                int countFeedback = 0;
+                float totalRatting = 0;
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Feedback feedback = ds.getValue(Feedback.class);
+                    if (feedback.getCounselor_id().equals(id_user)) {
+                        dataFeedback.add(feedback);
+                        countFeedback += 1;
+                        totalRatting += feedback.getRatting();
+                    }
+                }
+                if (dataFeedback != null) {
+                    feedbackAdapter = new FeedbackAdapter(FeedbackActivity.this, dataFeedback);
+                    rcy_list_feedback.setAdapter(feedbackAdapter);
+                    rcy_list_feedback.setLayoutManager(new LinearLayoutManager(FeedbackActivity.this));
+                    tv_total_feedback.setText(countFeedback + "");
+                    ratingBarAverageRatting.setRating(totalRatting / countFeedback);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void setControl() {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        ratingBarAverageRatting = findViewById(R.id._ratting_bar_average_rating);
+        rcy_list_feedback = findViewById(R.id.rcy_list_feedback);
+        tv_total_feedback = findViewById(R.id.tv_total_feedback);
+
     }
 }
