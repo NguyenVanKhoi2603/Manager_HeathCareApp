@@ -24,44 +24,83 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/custom_frames_post"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/btn_image_message_conversation_detail"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/lnl_showImageSend_conversation_detail"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:src="@drawable/ic_image">
+            android:background="#41000000"
+            android:orientation="horizontal"
+            android:visibility="gone">
 
-        </ImageButton>
+            <ImageView
+                android:id="@+id/image_send_conversation_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:adjustViewBounds="true"
+                android:maxWidth="100dp"
+                android:maxHeight="100dp"
+                android:padding="7dp"
+                android:src="@drawable/ic_image"
+                android:visibility="visible">
 
-        <TextView
-            android:layout_width="wrap_content"
+            </ImageView>
+
+            <ImageButton
+                android:id="@+id/btn_delete_image_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_close_24">
+
+            </ImageButton>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:text="|">
+            android:background="@drawable/custom_frames_post"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-        </TextView>
+            <ImageButton
+                android:id="@+id/btn_image_message_conversation_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:src="@drawable/ic_image">
 
-        <EditText
-            android:id="@+id/editText_send_message_conversation_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:hint="Aa">
+            </ImageButton>
 
-        </EditText>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="|">
 
-        <ImageButton
-            android:id="@+id/btn_send_message_conversation_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:src="@drawable/ic_send"></ImageButton>
+            </TextView>
+
+            <EditText
+                android:id="@+id/editText_send_message_conversation_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:hint="Aa">
+
+            </EditText>
+
+            <ImageButton
+                android:id="@+id/btn_send_message_conversation_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:src="@drawable/ic_send"></ImageButton>
+        </LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>

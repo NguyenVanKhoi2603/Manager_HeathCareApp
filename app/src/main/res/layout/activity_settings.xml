@@ -27,14 +27,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="10dp">
 
                 <LinearLayout
+                    android:id="@+id/lnl_info_admin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingLeft="10dp">
+                    android:paddingLeft="10dp"
+                    android:visibility="visible">
 
                     <TextView
                         android:id="@+id/tv_fullName_admin_settings"
@@ -54,17 +56,138 @@
                         android:textStyle="bold"></TextView>
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lnl_info_counselor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp"
+                    android:visibility="gone">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:cardCornerRadius="100dp"
+                        app:cardElevation="40dp">
+
+                        <ImageView
+                            android:id="@+id/img_avatar_counselor_profile_settings"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:src="@drawable/news1"></ImageView>
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_fullName_counselor_settings"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Counselor"
+                                android:textColor="@color/black"
+                                android:textSize="20dp"
+                                android:textStyle="bold"></TextView>
+
+                            <TextView
+                                android:id="@+id/tv_position_counselor_settings"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="#Doctor"
+                                android:textSize="15dp"
+                                android:textStyle="bold"></TextView>
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:id="@+id/tv_edit_counselor_settings"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/custom_btn_user_profile1"
+                            android:paddingLeft="15dp"
+                            android:paddingTop="4dp"
+                            android:paddingRight="15dp"
+                            android:paddingBottom="4dp"
+                            android:text="@string/edit"
+                            android:textColor="@color/black"
+                            android:textStyle="bold">
+
+                        </TextView>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_introduce_counselor_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="Hi guys"
+                        android:textColor="@color/purple_500"
+                        android:textSize="15dp"></TextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total Feedback:"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"></TextView>
+
+                        <TextView
+                            android:id="@+id/tv_total_feedback_counselor_settings"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="0">
+
+                        </TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="30dp"
+                            android:text="Ratting:"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"></TextView>
+
+                        <RatingBar
+                            android:id="@+id/_ratting_bar_average_rating_counselor_Settings"
+                            style="@style/Widget.AppCompat.RatingBar.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:stepSize="0.5">
+
+                        </RatingBar>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lnl_option_settings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:id="@+id/lnl_option_settings"
-                android:visibility="gone"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"

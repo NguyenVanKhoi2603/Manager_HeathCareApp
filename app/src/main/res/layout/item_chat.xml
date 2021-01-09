@@ -5,6 +5,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:id="@+id/rll_item_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -55,18 +56,32 @@
                 android:text="Shared a month ago"></TextView>
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btn_telegram_item_chat"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_total_message_not_seen_item_chat"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            android:background="@color/white"
-            android:src="@drawable/ic_space_bar">
+            android:layout_gravity="center_vertical"
+            android:background="#F44336"
+            app:cardCornerRadius="20dp"
+            android:layout_alignParentRight="true">
 
-        </ImageButton>
+            <TextView
+                android:id="@+id/tv_total_message_not_seen_item_chat"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="#F44336"
+                android:gravity="center_horizontal"
+                android:textColor="@color/white"
+                android:textSize="14dp"
+                android:textStyle="bold">
+
+            </TextView>
+        </androidx.cardview.widget.CardView>
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

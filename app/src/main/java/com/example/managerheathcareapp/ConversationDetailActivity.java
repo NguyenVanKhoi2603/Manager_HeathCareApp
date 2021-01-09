@@ -1,12 +1,18 @@
 package com.example.managerheathcareapp;
 
+import android.content.ContentResolver;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,17 +37,27 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ConversationDetailActivity extends AppCompatActivity {
-    ImageButton imageButtonBackSpace, imageButtonSendMessage, imageButtonImage;
+    ImageButton imageButtonBackSpace, imageButtonSendMessage, imageButtonImage, imageButtonCloseImageSend;
     EditText txt_message;
     RecyclerView rcy_ListMessage;
     TextView tv_userName;
-    ImageView imageViewUserReceiver;
+    LinearLayout lnl_showImage_send;
+    ImageView imageViewUserReceiver, imageSend;
     String user_id = "";
+    String id_image = "";
+    String url_image = "";
+    Boolean CheckImageSend = false;
+    private final int PICK_IMAGE_REQUEST = 71;
+    private Uri imgUri;
+    private StorageTask uploadTask;
     KeyBoardApp keyBoardApp = new KeyBoardApp();
     // Firebase sender, receiver
     private FirebaseAuth mAuth;
@@ -49,8 +65,10 @@ public class ConversationDetailActivity extends AppCompatActivity {
     DatabaseReference ref = database.getReference();
     DatabaseReference userRef = database.getReference("Users");
     DatabaseReference chatListRef = database.getReference("ChatList");
+    DatabaseReference dbMessageRef = database.getReference("Messages");
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
+    StorageReference ImageSendStorageRef = FirebaseStorage.getInstance().getReference("images/message");
     String id_sender = "";
     String id_receiver = "";
     //
@@ -84,6 +102,7 @@ public class ConversationDetailActivity extends AppCompatActivity {
 //        });
 
     }
+
     private void scrollToBottom(final RecyclerView recyclerView) {
         // scroll to last item to get the view of last item
         final LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -125,47 +144,63 @@ public class ConversationDetailActivity extends AppCompatActivity {
         imageButtonSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (txt_message.getText().length() > 0) {
+
                     try {
                         String message = txt_message.getText().toString().trim();
                         sendMessage(message);
                         keyBoardApp.closeKeyBoard(ConversationDetailActivity.this);
-                    }catch (Exception exception){
+                        lnl_showImage_send.setVisibility(View.GONE);
+                        id_image = "";
+                        CheckImageSend = false;
+                    } catch (Exception exception) {
 
                     }
 
-                }
+
             }
         });
-//        txt_message.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                if (charSequence.length() >= 1) {
-//                    imageButtonSendMessage.setBackgroundResource(R.drawable.ic_send);
-//                } else {
-//                    imageButtonSendMessage.setBackgroundResource(R.drawable.ic_send_enable);
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//
-//            }
-//        });
+        imageButtonCloseImageSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lnl_showImage_send.setVisibility(View.GONE);
+                url_image = "";
+                id_image = "";
+                CheckImageSend = false;
+            }
+        });
         imageButtonImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Error 404", Toast.LENGTH_SHORT).show();
+                chooseImage();
             }
         });
         imageButtonBackSpace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setSeenMessage(id_receiver, id_sender);
                 onBackPressed();
+            }
+        });
+    }
+
+    private void setSeenMessage(String id_receiver, String id_sender) {
+        dbMessageRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Message mes = ds.getValue(Message.class);
+                    String ID_Mess = ds.getKey();
+                    if (mes.getReceiver().equals(id_sender) && mes.getSender().equals(id_receiver)) {
+                        Message message = new Message(mes.getSender(), mes.getReceiver(), mes.getMessage(), mes.getImage(), mes.getTimestamp(), true);
+                        dbMessageRef.child(ID_Mess).setValue(message);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
@@ -184,7 +219,7 @@ public class ConversationDetailActivity extends AppCompatActivity {
                     }
                     tv_userName.setText(mUsers.get(0).getFirst_name() + " " + mUsers.get(0).getLast_name());
                     String imgUser = mUsers.get(0).getImage_id();
-                    if (!mUsers.get(0).getImage_id().equals("")){
+                    if (!mUsers.get(0).getImage_id().equals("")) {
                         try {
                             StorageReference islandRef = storageRef.child("images/user/" + imgUser);
                             final long ONE_MEGABYTE = 1024 * 1024;
@@ -217,7 +252,7 @@ public class ConversationDetailActivity extends AppCompatActivity {
     }
 
     private void readMessage() {
-        DatabaseReference dbMessageRef = database.getReference("Messages");
+
         dbMessageRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -229,7 +264,6 @@ public class ConversationDetailActivity extends AppCompatActivity {
                         dataMessage.add(mes);
                     }
                 }
-                //messageAdapter = new MessageAdapter(ConversationDetailActivity.this, dataMessage, "");
                 messageAdapter.notifyDataSetChanged();
                 rcy_ListMessage.setAdapter(messageAdapter);
 
@@ -243,15 +277,81 @@ public class ConversationDetailActivity extends AppCompatActivity {
     }
 
     private void sendMessage(String message) {
+        if (CheckImageSend == true) {
+            id_image = System.currentTimeMillis() + "." + getExtension(imgUri);
+        } else {
+            id_image = "";
+        }
+
+        if (uploadTask != null && uploadTask.isInProgress()) {
+            Toast.makeText(ConversationDetailActivity.this, "In progress upload!", Toast.LENGTH_SHORT).show();
+        } else {
+            try {
+                uploadFile(id_image);
+            } catch (Exception exception) {
+
+            }
+        }
         String timestamp = String.valueOf(System.currentTimeMillis());
         DatabaseReference mesRef = ref.child("Messages");
-        Message mes1 = new Message(id_sender, id_receiver, message, "1", timestamp, false);
+        Message mes1 = new Message(id_sender, id_receiver, message, id_image, timestamp, false);
         mesRef.push().setValue(mes1);
         txt_message.setText("");
-//        ChatList chatList = new ChatList(id_receiver);
-//        chatListRef.child(id_sender).child(id_receiver).setValue(chatList);
-//        ChatList chatList2 = new ChatList(id_sender);
-//        chatListRef.child(id_receiver).child(id_sender).setValue(chatList2);
+    }
+
+    private void uploadFile(String id_image) {
+        StorageReference ref = ImageSendStorageRef.child(id_image);
+        uploadTask = ref.putFile(imgUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        url_image = taskSnapshot.getUploadSessionUri().toString();
+                        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        // ...
+                    }
+                });
+    }
+
+    private void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+
+    }
+
+    private String getExtension(Uri uri) {
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            imgUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
+                imageSend.setImageBitmap(bitmap);
+                lnl_showImage_send.setVisibility(View.VISIBLE);
+                CheckImageSend = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void setControl() {
@@ -262,5 +362,8 @@ public class ConversationDetailActivity extends AppCompatActivity {
         rcy_ListMessage = findViewById(R.id.rcy_conversation_detail);
         tv_userName = findViewById(R.id.title_toolbar_conversation_detail);
         imageViewUserReceiver = findViewById(R.id.imgRows_conversation_detail);
+        lnl_showImage_send = findViewById(R.id.lnl_showImageSend_conversation_detail);
+        imageSend = findViewById(R.id.image_send_conversation_detail);
+        imageButtonCloseImageSend = findViewById(R.id.btn_delete_image_send);
     }
 }

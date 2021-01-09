@@ -8,8 +8,6 @@
     android:paddingBottom="1dp">
 
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,35 +24,52 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="7dp">
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/tv_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/adineue_pro_bold"
-
+                    android:padding="7dp"
                     android:text="common_google_play_services_enable_button"
-                    android:textColor="@color/white">
+                    android:textColor="@color/white"
+                    android:visibility="gone">
 
                 </TextView>
-                <LinearLayout
+
+                <ImageView
+                    android:id="@+id/image_message"
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:id="@+id/img_user_message"
-                        android:layout_width="30dp"
-                        android:visibility="gone"
-                        android:layout_height="30dp"
-                        android:src="@drawable/news1"></ImageView>
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@color/white"
+                    android:src="@drawable/ic_image"
+                    android:visibility="gone">
+
+                </ImageView>
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
                     <TextView
-                        android:visibility="gone"
                         android:id="@+id/tv_timestamp_message"
                         android:layout_width="wrap_content"
-                        android:textSize="9dp"
                         android:layout_height="wrap_content"
-                        android:text="19:59 20/11/2020 - seen"></TextView>
+                        android:text="19:59 20/11/2020 - seen"
+                        android:textSize="9dp"
+                        android:visibility="gone"></TextView>
+
+                    <ImageView
+                        android:id="@+id/img_user_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
+
+                    </ImageView>
                 </LinearLayout>
 
             </LinearLayout>
