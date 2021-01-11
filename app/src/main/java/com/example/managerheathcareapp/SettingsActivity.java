@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,14 +30,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class SettingsActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     CardView cv_Admin, cv_Counselors, cv_logOut;
     ImageButton imageButtonLogOut;
-    TextView tv_fullNameAdmin, tv_position;
-    LinearLayout lnl_option_settings;
+    ImageView imageViewAvatarCounselor;
+
+    RatingBar ratingBar_counselor;
+    TextView tv_fullNameAdmin, tv_position, tv_name_counselor, tv_position_counselor,tv_introduce_counselor,tv_total_feedback_counselor, tv_edit_counselor;
+    LinearLayout lnl_option_settings, lnl_info_admin, lnl_info_counselor;
 
     private ArrayList<Admin> mDataAdmin = new ArrayList<>();
     private ArrayList<Counselor> dataCounselor = new ArrayList<>();
@@ -43,7 +50,6 @@ public class SettingsActivity extends AppCompatActivity {
     // Firebase
     private FirebaseAuth mAuth;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-
     DatabaseReference dataRefAdmin;
     DatabaseReference counselorRef = firebaseDatabase.getReference("Counselors");
     DatabaseReference userRef = firebaseDatabase.getReference("Users");
@@ -62,9 +68,64 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        bottomNavigationView.setSelectedItemId(R.id.Settings);
         if (currentUser == null) {
             startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
         } else {
+            counselorRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    dataCounselor.clear();
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        Counselor counselor = ds.getValue(Counselor.class);
+                        if (counselor.getId_counselor().equals(currentUser.getUid())) {
+                            dataCounselor.add(counselor);
+                        }
+                    }
+                    if (dataCounselor != null) {
+                        try {
+                            lnl_info_counselor.setVisibility(View.VISIBLE);
+                            tv_position_counselor.setText(dataCounselor.get(0).getPosition_counselor());
+                            tv_introduce_counselor.setText(dataCounselor.get(0).getIntroduce());
+                            userRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    dataUser.clear();
+                                    for (DataSnapshot ds : snapshot.getChildren()) {
+                                        User user = ds.getValue(User.class);
+                                        if (user.getUser_id().equals(currentUser.getUid())) {
+                                            dataUser.add(user);
+                                        }
+                                    }
+                                    if (dataUser != null) {
+                                        try {
+                                            tv_name_counselor.setText(dataUser.get(0).getFirst_name() + " " + dataUser.get(0).getLast_name());
+                                        } catch (Exception exception) {
+
+                                        }
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        } catch (Exception exception) {
+
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            //
             Query query = dataRefAdmin.orderByChild("id_admin").equalTo(currentUser.getUid());
             query.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -74,19 +135,17 @@ public class SettingsActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 mDataAdmin.clear();
-                                String checkCounselor = "0";
                                 for (DataSnapshot ds : snapshot.getChildren()) {
                                     Admin admin = ds.getValue(Admin.class);
                                     if (admin.getId_admin().equals(currentUser.getUid())) {
                                         mDataAdmin.add(admin);
-                                        checkCounselor = "0";
                                     }
-
                                 }
                                 try {
                                     if (mDataAdmin != null) {
+                                        lnl_info_admin.setVisibility(View.VISIBLE);
                                         lnl_option_settings.setVisibility(View.VISIBLE);
-                                        Toast.makeText(SettingsActivity.this, mDataAdmin.get(0).toString(), Toast.LENGTH_SHORT).show();
+                                        lnl_info_counselor.setVisibility(View.GONE);
                                         tv_fullNameAdmin.setText(mDataAdmin.get(0).getFullName());
                                         if (mDataAdmin.get(0).getRole().equals("1")) {
                                             tv_position.setText("Manager");
@@ -95,118 +154,16 @@ public class SettingsActivity extends AppCompatActivity {
                                             tv_position.setText("Admin");
                                             cv_Admin.setVisibility(View.GONE);
                                         }
-                                    } else {
-                                        counselorRef.addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                dataCounselor.clear();
-                                                for (DataSnapshot ds : snapshot.getChildren()) {
-                                                    Counselor counselor = ds.getValue(Counselor.class);
-                                                    if (counselor.getId_counselor().equals(currentUser.getUid())) {
-                                                        dataCounselor.add(counselor);
-                                                    }
-                                                }
-                                                if (dataCounselor != null) {
-                                                    try {
-                                                        tv_position.setText(dataCounselor.get(0).getPosition_counselor());
-                                                    } catch (Exception exception) {
-
-                                                    }
-
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
-
-                                            }
-                                        });
-                                        userRef.addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                dataUser.clear();
-                                                for (DataSnapshot ds : snapshot.getChildren()) {
-                                                    User user = ds.getValue(User.class);
-                                                    if (user.getUser_id().equals(currentUser.getUid())) {
-                                                        dataUser.add(user);
-                                                    }
-                                                }
-
-                                                if (dataUser != null) {
-                                                    try {
-                                                        tv_fullNameAdmin.setText(dataUser.get(0).getFirst_name() + " " + dataUser.get(0).getLast_name());
-                                                    } catch (Exception exception) {
-
-                                                    }
-
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
-
-                                            }
-                                        });
                                     }
 
                                 } catch (Exception ex) {
-                                    counselorRef.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            dataCounselor.clear();
-                                            for (DataSnapshot ds : snapshot.getChildren()) {
-                                                Counselor counselor = ds.getValue(Counselor.class);
-                                                if (counselor.getId_counselor().equals(currentUser.getUid())) {
-                                                    dataCounselor.add(counselor);
-                                                }
-                                            }
-                                            if (dataCounselor != null) {
-                                                try {
-                                                    tv_position.setText(dataCounselor.get(0).getPosition_counselor());
-                                                } catch (Exception exception) {
 
-                                                }
-
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-
-                                        }
-                                    });
-                                    userRef.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            dataUser.clear();
-                                            for (DataSnapshot ds : snapshot.getChildren()) {
-                                                User user = ds.getValue(User.class);
-                                                if (user.getUser_id().equals(currentUser.getUid())) {
-                                                    dataUser.add(user);
-                                                }
-                                            }
-
-                                            if (dataUser != null) {
-                                                try {
-                                                    tv_fullNameAdmin.setText(dataUser.get(0).getFirst_name() + " " + dataUser.get(0).getLast_name());
-                                                } catch (Exception exception) {
-
-                                                }
-
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-
-                                        }
-                                    });
                                 }
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-                                Toast.makeText(getApplicationContext(), "ssafsfasf", Toast.LENGTH_SHORT).show();
+
                             }
                         });
                     } else {
@@ -293,10 +250,6 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    private void showInfoAdmin() {
-        FirebaseUser user = mAuth.getCurrentUser();
-
-    }
 
     private void setControl() {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -307,6 +260,16 @@ public class SettingsActivity extends AppCompatActivity {
         tv_fullNameAdmin = findViewById(R.id.tv_fullName_admin_settings);
         tv_position = findViewById(R.id.tv_position_admin_settings);
         lnl_option_settings = findViewById(R.id.lnl_option_settings);
+        imageViewAvatarCounselor = findViewById(R.id.img_avatar_counselor_profile_settings);
+
+        tv_edit_counselor = findViewById(R.id.tv_edit_counselor_settings);
+        ratingBar_counselor = findViewById(R.id._ratting_bar_average_rating_counselor_Settings);
+        tv_name_counselor = findViewById(R.id.tv_fullName_counselor_settings);
+        tv_position_counselor = findViewById(R.id.tv_position_counselor_settings);
+        tv_introduce_counselor = findViewById(R.id.tv_introduce_counselor_settings);
+        tv_total_feedback_counselor = findViewById(R.id.tv_total_feedback_counselor_settings);
+        lnl_info_admin = findViewById(R.id.lnl_info_admin);
+        lnl_info_counselor = findViewById(R.id.lnl_info_counselor);
 
     }
 }

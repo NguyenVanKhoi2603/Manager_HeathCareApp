@@ -1,10 +1,12 @@
 package com.example.managerheathcareapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +15,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.managerheathcareapp.Adapter.ChatListAdapter;
+import com.example.managerheathcareapp.Functions.CheckRole;
+import com.example.managerheathcareapp.Model.Admin;
 import com.example.managerheathcareapp.Model.ChatList;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,13 +36,17 @@ public class MessageActivity extends AppCompatActivity {
     RecyclerView recyclerViewChatList;
     ArrayList<ChatList> dataChatList = new ArrayList<>();
     ChatListAdapter chatListAdapter;
+    CheckRole checkRole;
+    String role = "";
     // Firebase
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference();
     DatabaseReference userRef = database.getReference("Users");
     DatabaseReference chatListRef = database.getReference("ChatList");
+    DatabaseReference adminRef = database.getReference("Admins");
     FirebaseStorage storage = FirebaseStorage.getInstance();
+
     StorageReference storageRef = storage.getReference();
 
     @Override
@@ -50,6 +58,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void showListChat(String user_id) {
+
         DatabaseReference listU = chatListRef.child(user_id);
         listU.addValueEventListener(new ValueEventListener() {
             @Override
@@ -80,7 +89,38 @@ public class MessageActivity extends AppCompatActivity {
     private void setEvent() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         String user_id = currentUser.getUid();
+        adminRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Admin admin = ds.getValue(Admin.class);
+                    if (admin.getId_admin().equals(user_id)) {
+                        role = "admin";
+                    }
+                }
+                if (role.equals("admin")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MessageActivity.this);
+                    builder.setTitle("Notification");
+                    builder.setMessage("Only counselor has access!");
+                    builder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            onBackPressed();
+                        }
+                    });
+                    builder.show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
         showListChat(user_id);
+
         bottomNavigationView.setSelectedItemId(R.id.Message);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -113,15 +153,6 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
     }
-
-//    @Override
-//    public void onPrepareOptionsMenu(Menu menu) {
-//        super.onPrepareOptionsMenu(menu);
-//        if (menu.findItem(R.id.action_messages) != null)
-//            menu.findItem(R.id.action_messages).setVisible(false);
-//    }
-
-
 
 
     private void setControl() {
