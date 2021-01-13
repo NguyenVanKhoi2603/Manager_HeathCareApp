@@ -20,6 +20,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     ImageView imageViewBackSpace;
     Button btnSend;
     TextInputEditText txt_email;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +40,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 FirebaseAuth auth = FirebaseAuth.getInstance();
                 String emailAddress = txt_email.getText().toString().trim();
-
                 auth.sendPasswordResetEmail(emailAddress)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -52,7 +51,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                                 }
                             }
                         });
-
             }
         });
     }

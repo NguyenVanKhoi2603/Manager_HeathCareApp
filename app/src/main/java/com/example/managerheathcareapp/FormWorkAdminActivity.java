@@ -3,6 +3,7 @@ package com.example.managerheathcareapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,7 @@ public class FormWorkAdminActivity extends AppCompatActivity {
 
     // Firebase
     private FirebaseAuth mAuth;
+    private FirebaseAuth mAuthRegister;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference adminRef = database.getReference("Admins");
     @Override
@@ -49,6 +51,10 @@ public class FormWorkAdminActivity extends AppCompatActivity {
                 String phone = txt_phone.getText().toString().trim();
                 String fullName = txt_fullName.getText().toString().trim();
                 registerAdmin(email, password, phone, fullName);
+                mAuth.signOut();
+                if (mAuth.getCurrentUser() == null){
+                    startActivity(new Intent(FormWorkAdminActivity.this, LoginActivity.class));
+                }
             }
         });
         imageButtonBackSpace.setOnClickListener(new View.OnClickListener() {
@@ -68,10 +74,10 @@ public class FormWorkAdminActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(FormWorkAdminActivity.this, "Authentication Successful.",
                                     Toast.LENGTH_SHORT).show();
-                            //id_admin, fullName, password, phone, email, role;
                             String id_admin = mAuth.getUid();
                             Admin admin = new Admin(id_admin, fullName, phone, email, "0");
                             adminRef.child(id_admin).setValue(admin);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(FormWorkAdminActivity.this, "Authentication failed.",

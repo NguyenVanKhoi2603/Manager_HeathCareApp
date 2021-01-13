@@ -4,9 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,9 +21,13 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.managerheathcareapp.Adapter.FeedbackAdapter;
 import com.example.managerheathcareapp.Model.Admin;
 import com.example.managerheathcareapp.Model.Counselor;
+import com.example.managerheathcareapp.Model.Feedback;
 import com.example.managerheathcareapp.Model.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +37,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
@@ -41,9 +51,9 @@ public class SettingsActivity extends AppCompatActivity {
     ImageView imageViewAvatarCounselor;
 
     RatingBar ratingBar_counselor;
-    TextView tv_fullNameAdmin, tv_position, tv_name_counselor, tv_position_counselor,tv_introduce_counselor,tv_total_feedback_counselor, tv_edit_counselor;
+    TextView tv_fullNameAdmin, tv_position, tv_name_counselor, tv_position_counselor, tv_introduce_counselor, tv_total_feedback_counselor, tv_edit_counselor;
     LinearLayout lnl_option_settings, lnl_info_admin, lnl_info_counselor;
-
+    ArrayList<Feedback> dataFeedback = new ArrayList<>();
     private ArrayList<Admin> mDataAdmin = new ArrayList<>();
     private ArrayList<Counselor> dataCounselor = new ArrayList<>();
     private ArrayList<User> dataUser = new ArrayList<>();
@@ -53,6 +63,9 @@ public class SettingsActivity extends AppCompatActivity {
     DatabaseReference dataRefAdmin;
     DatabaseReference counselorRef = firebaseDatabase.getReference("Counselors");
     DatabaseReference userRef = firebaseDatabase.getReference("Users");
+    DatabaseReference feedbackRef = firebaseDatabase.getReference("Feedback");
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +98,7 @@ public class SettingsActivity extends AppCompatActivity {
                     if (dataCounselor != null) {
                         try {
                             lnl_info_counselor.setVisibility(View.VISIBLE);
-                            tv_position_counselor.setText(dataCounselor.get(0).getPosition_counselor());
+                            tv_position_counselor.setText("#" + dataCounselor.get(0).getPosition_counselor());
                             tv_introduce_counselor.setText(dataCounselor.get(0).getIntroduce());
                             userRef.addValueEventListener(new ValueEventListener() {
                                 @Override
@@ -100,10 +113,56 @@ public class SettingsActivity extends AppCompatActivity {
                                     if (dataUser != null) {
                                         try {
                                             tv_name_counselor.setText(dataUser.get(0).getFirst_name() + " " + dataUser.get(0).getLast_name());
+                                            String imgUser = dataUser.get(0).getImage_id();
+                                            try {
+                                                StorageReference islandRef = storageRef.child("images/user/" + imgUser);
+                                                final long ONE_MEGABYTE = 1024 * 1024;
+                                                islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                                    @Override
+                                                    public void onSuccess(byte[] bytes) {
+                                                        // Data for "images/island.jpg" is returns, use this as needed
+                                                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                                        imageViewAvatarCounselor.setImageBitmap(bitmap);
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception exception) {
+                                                        // Handle any errors
+                                                    }
+                                                });
+
+                                            } catch (Exception ex) {
+
+                                            }
                                         } catch (Exception exception) {
 
                                         }
 
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                            feedbackRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    dataFeedback.clear();
+                                    int countFeedback = 0;
+                                    float totalRatting = 0;
+                                    for (DataSnapshot ds : snapshot.getChildren()) {
+                                        Feedback feedback = ds.getValue(Feedback.class);
+                                        if (feedback.getCounselor_id().equals(currentUser.getUid())) {
+                                            dataFeedback.add(feedback);
+                                            countFeedback += 1;
+                                            totalRatting += feedback.getRatting();
+                                        }
+                                    }
+                                    if (dataFeedback != null) {
+                                        tv_total_feedback_counselor.setText(countFeedback + "");
+                                        ratingBar_counselor.setRating(totalRatting / countFeedback);
                                     }
                                 }
 
@@ -217,7 +276,16 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(new Intent(SettingsActivity.this, ManagerAdminActivity.class));
             }
         });
-
+        tv_edit_counselor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), FormWorkCounselorsMainActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("ID_COUNSELOR", mAuth.getCurrentUser().getUid());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         cv_Counselors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

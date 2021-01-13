@@ -76,6 +76,7 @@ public class NewsAndNutritionAdapter extends RecyclerView.Adapter<NewsAndNutriti
         } catch (Exception ex) {
 
         }
+
         holder.tv_category_post.setText("#"+news.getCategory());
         holder.tv_title_news.setText(news.getTitle());
         holder.tv_content_news.setText(news.getDescription());

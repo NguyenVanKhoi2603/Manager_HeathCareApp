@@ -223,7 +223,6 @@ public class NewsAndNutritionActivity extends AppCompatActivity {
             }
         });
 
-        Toast.makeText(NewsAndNutritionActivity.this, currentUser.getUid() + "", Toast.LENGTH_SHORT).show();
         try {
             newsAndNutritionAdapter = new NewsAndNutritionAdapter(dataPost, NewsAndNutritionActivity.this);
             recyclerViewNews.setAdapter(newsAndNutritionAdapter);
@@ -271,7 +270,6 @@ public class NewsAndNutritionActivity extends AppCompatActivity {
     }
 
     private void searchPostByKey(String key) {
-        // postsNewAndNutritionRef.whereEqualTo("title", key.toLowerCase()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
         postsNewAndNutritionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -330,7 +328,6 @@ public class NewsAndNutritionActivity extends AppCompatActivity {
             case 121:
                 String[] str = item.getTitle().toString().split("-");
                 item.setTitle(str[0]);
-                Toast.makeText(getApplicationContext(), str[1], Toast.LENGTH_SHORT).show();
                 categoryRef.document(str[1]).delete();
                 return true;
             case 122:

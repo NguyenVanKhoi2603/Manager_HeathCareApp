@@ -19,7 +19,7 @@
             <ImageView
                 android:id="@+id/img_item_admin"
                 android:layout_width="50dp"
-                android:src="@drawable/news1"
+                android:src="@drawable/ic_baseline_person_24"
                 android:layout_height="50dp">
             </ImageView>
         </androidx.cardview.widget.CardView>

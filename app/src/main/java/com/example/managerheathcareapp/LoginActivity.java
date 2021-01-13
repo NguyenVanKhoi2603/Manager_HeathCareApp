@@ -45,7 +45,6 @@ public class LoginActivity extends AppCompatActivity {
         setEvent();
 
     }
-
     private void setEvent() {
         //loginFunc("manager@gmail.com", "123456789");
         tv_forgot_password.setOnClickListener(new View.OnClickListener() {
@@ -54,9 +53,11 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
             }
         });
+        txt_username.setText("manager@gmail.com");
+        txt_password.setText("123456789");
         //loginFunc("manager@gmail.com", "123456789");
-        loginFunc("admin@gmail.com", "admin123");
-        //loginFunc("counselor2@gmail.com", "123456789");
+        //loginFunc("admin@gmail.com", "admin123");
+       // loginFunc("counselor2@gmail.com", "123456789");
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

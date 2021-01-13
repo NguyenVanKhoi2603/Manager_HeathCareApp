@@ -1,23 +1,31 @@
 package com.example.managerheathcareapp.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.managerheathcareapp.Model.Admin;
 import com.example.managerheathcareapp.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.AdminViewHolder> {
     Context context;
     ArrayList<Admin> admins = new ArrayList<>();
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference UsersRef = database.getReference("Users");
+    DatabaseReference adminRef = database.getReference("Admins");
 
     public AdminAdapter(Context context, ArrayList<Admin> admins) {
         this.context = context;
@@ -40,6 +48,31 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.AdminViewHol
         holder.tv_fullName.setText(admin.getFullName());
         holder.tv_email.setText(admin.getEmail());
         holder.tv_phone.setText(admin.getPhone());
+        String ID_ADMIN = admin.getId_admin();
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Notification");
+                builder.setMessage("Do you want delete: " + admin.getFullName());
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        UsersRef.child(ID_ADMIN).removeValue();
+                        adminRef.child(ID_ADMIN).removeValue();
+                        Toast.makeText(context, "Deleted!", Toast.LENGTH_LONG).show();
+                    }
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.show();
+                return true;
+            }
+        });
     }
 
     @Override

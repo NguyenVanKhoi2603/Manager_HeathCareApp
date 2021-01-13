@@ -73,6 +73,7 @@ public class ManagerAdminActivity extends AppCompatActivity {
         AdminRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mAdmins.clear();
                 for (DataSnapshot ds : snapshot.getChildren()){
                     Admin admin = ds.getValue(Admin.class);
                     mAdmins.add(admin);
